@@ -36,8 +36,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
 
     @IBAction func deleteCell(sender: NSButton) {
-        elements.removeAtIndex(tableView.selectedRow)
-        tableView.reloadData()
+        if tableView.selectedRow != -1 {    // only deletes if a cell is selected!
+            elements.removeAtIndex(tableView.selectedRow)
+            tableView.reloadData()
+        }
     }
     
     // MARK: - TableViewDelegate
