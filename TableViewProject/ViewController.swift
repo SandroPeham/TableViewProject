@@ -7,13 +7,21 @@
 //
 
 import Cocoa
+import GameplayKit
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
+    
+    private var elements: [Int] = []
 
+    @IBOutlet var tableView: NSTableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        for _ in 1...3 {
+            elements.append(GKRandomSource.sharedRandom().nextInt())
+        }
+        
     }
 
     override var representedObject: AnyObject? {
@@ -22,6 +30,30 @@ class ViewController: NSViewController {
         }
     }
 
+    @IBAction func addCell(sender: NSButton) {
+        elements.append(GKRandomSource.sharedRandom().nextInt())
+        tableView.reloadData()
+    }
 
+    @IBAction func deleteCell(sender: NSButton) {
+        elements.removeAtIndex(tableView.selectedRow)
+        tableView.reloadData()
+    }
+    
+    // MARK: - TableViewDelegate
+    
+    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        if let cell = tableView.makeViewWithIdentifier("randomIntCell", owner: nil) as? NSTableCellView {
+            cell.textField?.stringValue = "\(elements[row])"
+            return cell
+        }
+        return nil
+    }
+    
+    // MARK: - TableViewDataSource
+    
+    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+        return elements.count
+    }
 }
 
